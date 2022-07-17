@@ -1,0 +1,51 @@
+// import { Controller } from '@nestjs/common';
+//
+// @Controller('task')
+// export class TaskController {}
+
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
+import { TaskService } from './task.service';
+import { Task } from './task.entity';
+
+@Controller('tasks')
+export class TaskController {
+  constructor(private readonly taskService: TaskService) {}
+
+  @Get()
+  findAll(): Promise<Task[]> {
+    return this.taskService.findAll();
+  }
+
+  @Get(':id')
+  get(@Param() params) {
+    return this.taskService.findOne(params.id);
+  }
+
+  @Get('/rela')
+  getRela(@Param() params) {
+    return this.taskService.findById(params.id, ['status']);
+  }
+
+  @Post()
+  create(@Body() task: Task) {
+    return this.taskService.create(task);
+  }
+
+  @Put()
+  update(@Body() task: Task) {
+    return this.taskService.update(task);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param() params) {
+    return this.taskService.delete(params.id);
+  }
+}
